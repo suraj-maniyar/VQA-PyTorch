@@ -27,7 +27,7 @@ Another alternative I tried was to **multiply** the features instead of cancaten
 
 
 ## Results
-I have trained the network for over 300 epochs and it very easily overfits the data. The best validation accurracy I obtained is 38.11%.  
+I have trained the network for over 300 epochs and it very easily overfits the data. The best validation accurracy I obtained is **38.11%**.  
 The following figure shows the learning curves I got:  
 
 <p align="center">
@@ -37,16 +37,16 @@ The following figure shows the learning curves I got:
 
 Following are few examples of images from the validation set:  
 
-<p align="center">
-  <img src="assets/COCO_val2014_000000174042.jpg" width="50%">
+<p align="left">
+  <img src="assets/COCO_val2014_000000174042.jpg" width="40%">
 </p>
 
 Question: "What is the dog doing?"  
 Answer: "running"  
 
 
-<p align="center">
-  <img src="assets/COCO_val2014_000000035594.jpg" width="50%">
+<p align="left">
+  <img src="assets/COCO_val2014_000000035594.jpg" width="40%">
 </p>
 
 Question: "What is in the image"  
@@ -59,8 +59,8 @@ Question: "What animal is shown in the picture"
 Answer: "eleph"  
 
 
-<p align="center">
-  <img src="assets/COCO_val2014_000000123642.jpg" width="50%">
+<p align="left">
+  <img src="assets/COCO_val2014_000000123642.jpg" width="40%">
 </p>
 
 Question: "What food is this"  
