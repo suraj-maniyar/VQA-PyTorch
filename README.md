@@ -38,37 +38,37 @@ The following figure shows the learning curves I got:
 Following are few examples of images from the validation set:  
 
 <p align="left">
-  <img src="assets/COCO_val2014_000000174042.jpg" width="40%">
+  <img src="assets/COCO_val2014_000000174042.jpg" width="60%">
 </p>
 
-Question: "What is the dog doing?"  
-Answer: "running"  
+Q: What is the dog doing?  
+A: running  
 
 
 <p align="left">
-  <img src="assets/COCO_val2014_000000035594.jpg" width="40%">
+  <img src="assets/COCO_val2014_000000035594.jpg" width="60%">
 </p>
 
-Question: "What is in the image"  
-Answer: "cat"  
+Q: What is in the image?  
+A: cat  
 
-Question: "Where is this picture taken"  
-Answer: "mountain"  
+Q: Where is this picture taken?  
+A: mountain  
 
-Question: "What animal is shown in the picture"  
-Answer: "eleph"  
+Q: What animal is shown in the picture?  
+A: eleph  
 
 
 <p align="left">
-  <img src="assets/COCO_val2014_000000123642.jpg" width="40%">
+  <img src="assets/COCO_val2014_000000123642.jpg" width="60%">
 </p>
 
-Question: "What food is this"  
-Answer: "pizza"  
+Q: What food is this?  
+A: pizza  
 
-Question:  "What is the stuffing"  
-Answer: "ketchup"  
+Q: What is the stuffing?  
+A: ketchup  
 
-Question: "What bread is used"  
-ANswer:  "wheat"
+Q: What bread is used?  
+A: wheat
 
