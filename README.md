@@ -38,7 +38,7 @@ The following figure shows the learning curves I got:
 Following are few examples of images from the validation set:  
 
 <p align="left">
-  <img src="assets/COCO_val2014_000000174042.jpg" width="60%">
+  <img src="assets/COCO_val2014_000000174042.jpg" width="50%">
 </p>
 
 Q: What is the dog doing?  
@@ -46,7 +46,7 @@ A: running
 
 
 <p align="left">
-  <img src="assets/COCO_val2014_000000035594.jpg" width="60%">
+  <img src="assets/COCO_val2014_000000035594.jpg" width="50%">
 </p>
 
 Q: What is in the image?  
@@ -60,7 +60,7 @@ A: eleph
 
 
 <p align="left">
-  <img src="assets/COCO_val2014_000000123642.jpg" width="60%">
+  <img src="assets/COCO_val2014_000000123642.jpg" width="50%">
 </p>
 
 Q: What food is this?  
@@ -86,4 +86,43 @@ The following are the results obtained with the new architecture trained for 160
 </p>
 
 
+Some examples from the validation set are:
 
+
+<p align="left">
+  <img src="assets/COCO_val2014_000000056891.jpg" width="50%">
+</p>
+
+Q: What animal is shown?  
+A: horse  
+
+Q: is that water behind the horse?  
+A: ye  
+
+Q: How many horses are there?  
+A: 1
+
+
+<p align="left">
+  <img src="assets/COCO_val2014_000000006497.jpg" width="50%">
+</p>
+
+Q: What is in the background?  
+A: '<unk>' (unknown)
+
+Q: What color is the vase?  
+A: white  
+
+
+<p align="left">
+  <img src="assets/COCO_val2014_000000578655.jpg" width="50%">
+</p>
+
+Q: What time of day is this?  
+A: '<unk>'  
+
+Q: What is in the air?  
+A: kite  
+
+Q: Where is this picture taken?  
+A: beach  
