@@ -11,8 +11,8 @@ def read(path):
 def train(config, model, train_loader, val_loader, optimizer, criterion):
 
 
-    TA, VA = [], []
-    TL, VL = [], []
+    #TA, VA = [], []
+    #TL, VL = [], []
  
     TA = read('results/train_accuracy.pkl')
     VA = read('results/val_accuracy.pkl')
@@ -62,7 +62,7 @@ def train(config, model, train_loader, val_loader, optimizer, criterion):
                                                                                 100.0*float(correct.item())/total,
                                                                                 correct,
                                                                                 total))
-                torch.save(model, 'checkpoint/model.pth')
+                torch.save(model, 'checkpoint/model_vgg16.pth')
 
         model.eval()
         loss_val = 0

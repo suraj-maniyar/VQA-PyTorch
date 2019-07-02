@@ -19,7 +19,10 @@ train_features, val_features = [], []
 
 ### Loading GLoVe
 
-dim = 300
+#dim = 300
+dim = 50
+topK = 500  # selects topK frequent words and sets other as <unk> (unknown) 
+
 with open('data/glove.6B.'+str(dim)+'d.txt', 'r') as f: 
     embedding = f.read()
 
@@ -37,12 +40,12 @@ print('Loaded GloVe')
 
 ### Loading Image Features
 
-with open('dumps/image_features.pkl', 'rb') as f:
+with open('dumps/train_features_vgg16.pkl', 'rb') as f:
     original_features = pickle.load(f)
 print('len(original_features) : ', len(original_features))
 
 
-with open('dumps/val_features.pkl', 'rb') as f:
+with open('dumps/val_features_vgg16.pkl', 'rb') as f:
     original_val_features = pickle.load(f)
 print('len(original_val_features) : ', len(original_val_features))
 
@@ -84,13 +87,15 @@ for i in range(len(train_features)):
 
 # print('MAX Question LEN (INPUT SEQ LENGTH): ', max(question_len))
 
-with open('dumps/ignore_list.pkl', 'rb') as f:
-    ignore_list = pickle.load(f)
+with open('dumps/word_list.pkl', 'rb') as f:
+    word_list = pickle.load(f)
+
+word_list = word_list[0:topK]
 
 
 for i in range(len(answer)):
     answer[i] = change(answer[i])
-    if(answer[i] in ignore_list):
+    if answer[i] not in word_list:
         answer[i] = '<unk>'
 
 
@@ -139,7 +144,6 @@ print('idx2word : ', len(idx2word))
 
 
 
-'''
 
 # Finding frequency of answer words for inverse weights initialization 
 
@@ -150,10 +154,9 @@ for i in range(len(train_features)):
     
     if(len(ans) == 2):
         ans = change(ans[0])
-        if ans in ignore_list:
+        if ans not in word_list:
             ans = '<unk>'
         answer_train.append(ans)
-
 
 
 from collections import Counter
@@ -167,21 +170,6 @@ for i in range(len(keys_train)):
     freq_train[ keys_train[i] ] = values_train[i]
 
 
-weights = []
-for key in sorted_keys:
-     weights.append( freq_train[key] )
-
-for i in range(len(weights)):
-    weights[i] = 1.0/weights[i]
-
-weights = torch.Tensor(weights)
-print('weights : ', weights)
-
-if torch.cuda.is_available():
-    weights = weights.cuda()
-
-'''
-
 #################################################################################################
 
 
@@ -192,15 +180,15 @@ config['vocab_size'] = len(word2idx)
 config['input_seq_len'] = 22 #max(question_len)
 config['embedding_size'] = dim
 
-config['num_hidden_units'] = 64
+config['num_hidden_units'] = 512
 config['num_layers'] = 2
 
 config['dropout'] = 0.4
-config['learning_rate'] = 0.0001
+config['learning_rate'] = 0.001
 config['epochs'] = 400
 
-config['image_feature'] = 256
-config['question_feature'] = 256
+config['image_feature'] = 1024
+config['question_feature'] = 1024
 
 
 
@@ -210,17 +198,17 @@ config['question_feature'] = 256
 
 
 
-train_dataset = ImageFeatureDataset(config, train_features, input_embedding, word2idx, ignore_list)
-train_loader = DataLoader(train_dataset, batch_size=config['batch_size'], shuffle=True, num_workers=4)
+train_dataset = ImageFeatureDataset(config, train_features, input_embedding, word2idx, word_list)
+train_loader = DataLoader(train_dataset, batch_size=config['batch_size'], shuffle=True)
 
-val_dataset = ImageFeatureDataset(config, val_features, input_embedding, word2idx, ignore_list)
-val_loader = DataLoader(val_dataset, batch_size=config['batch_size'], num_workers=4)
-
-
+val_dataset = ImageFeatureDataset(config, val_features, input_embedding, word2idx, word_list)
+val_loader = DataLoader(val_dataset, batch_size=config['batch_size'])
 
 
-if os.path.isfile('checkpoint/model.pth'):
-    model = torch.load('checkpoint/model.pth')
+
+
+if os.path.isfile('checkpoint/model_vgg16.pth'):
+    model = torch.load('checkpoint/model_vgg16.pth')
     print('\nModel Loaded from Disk\n')
 else:
     model = VQA_FeatureModel(config)
@@ -243,38 +231,10 @@ print('########### TRAINING ############\n')
 
 
 
-
-
-
-
-class FocalLoss(nn.Module):
-    def __init__(self, alpha=1, gamma=2, logits=False, reduce=True):
-        super(FocalLoss, self).__init__()
-        self.alpha = alpha
-        self.gamma = gamma
-        self.logits = logits
-        self.reduce = reduce
-
-    def forward(self, inputs, targets):
-        if self.logits:
-            BCE_loss = F.binary_cross_entropy_with_logits(inputs, targets, reduce=False)
-        else:
-            BCE_loss = F.binary_cross_entropy(inputs, targets, reduce=False)
-        pt = torch.exp(-BCE_loss)
-        F_loss = self.alpha * (1-pt)**self.gamma * BCE_loss
-
-        if self.reduce:
-            return torch.mean(F_loss)
-        else:
-            return F_loss
-
-
-
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=config['learning_rate'])
 
 
 train(config, model, train_loader, val_loader, optimizer, criterion)
-
 
 

@@ -3,7 +3,7 @@ import pickle, os
 import skimage.io
 import matplotlib.pyplot as plt
 
-from model import LanguageModel, VQA_FeatureModel
+from model import LanguageModel, VQA_FeatureModel, VGG16
 from data_loader import ImageFeatureDataset
 from data_utils import change, preprocess_text
 
@@ -12,16 +12,17 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 import torchvision.transforms.functional as F
 import torchvision.transforms as transforms
+import torchvision.models as models
 
 
-with open('dumps/val_features.pkl', 'rb') as f:
+with open('dumps/val_features_vgg16.pkl', 'rb') as f:
     v = pickle.load(f)
 paths = [x[1] for x in v]
 
 
-resnet = torch.load('checkpoint/resnet.pth')
-print('Loaded ResNet Model')
-
+vgg16 = VGG16()
+print('Loaded VGG16 Model')
+vgg16 = vgg16.eval()
 
 img_transform = transforms.Compose([
                                      transforms.Resize(( 224, 224 )),
@@ -41,7 +42,7 @@ def get_feature(path):
     img = F.to_pil_image(img)
     img = img_transform(img)
     img = img.unsqueeze(0)
-    output = resnet(img)
+    output = vgg16(img)
     output = output.view(-1)
 
     return output.detach()
@@ -61,23 +62,15 @@ with open('dumps/idx2word.pkl', 'rb') as f:
 print('idx2word loaded')
 
 
-model = torch.load('checkpoint/model.pth')
+model = torch.load('checkpoint/model_vgg16.pth')
 model = model.eval()
 print('model loaded')
 
-
-img_transform = transforms.Compose([
-                                     transforms.Resize(( 224, 224 )),
-                                     transforms.ToTensor(),
-                                     transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                                           std=[0.229, 0.224, 0.225])
-                                     ])
-
-def predict_image(path, question, model=model, renset=resnet, idx2word=idx2word, input_embedding=input_embedding):
+def predict_image(path, question, model=model, idx2word=idx2word, input_embedding=input_embedding):
 
     
     input_seq_len = 21
-    embedding_size = 300
+    embedding_size = 50
 
     X1 = get_feature(path)
     
@@ -109,6 +102,14 @@ def predict_image(path, question, model=model, renset=resnet, idx2word=idx2word,
 
 
 def display(path):
+
+    for i in range(len(v)):
+        _, p, q, a = v[i]
+        if p == path:
+            print('question : ', q)
+            print('answer : ', a)
+            break
+
     img = skimage.io.imread(path)
     plt.imshow(img)
     plt.show(block=False)

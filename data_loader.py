@@ -7,13 +7,13 @@ import random
 
 
 class ImageFeatureDataset(Dataset):
-    def __init__(self, config, image_features, input_embedding, word2idx, ignore_list):
+    def __init__(self, config, image_features, input_embedding, word2idx, word_list):
     
         self.config = config
         self.input_embedding = input_embedding
         self.word2idx = word2idx
         self.image_features = image_features
-        self.ignore_list = ignore_list
+        self.word_list = word_list
 
     
     def __len__(self):
@@ -53,7 +53,7 @@ class ImageFeatureDataset(Dataset):
     
         if answer not in self.word2idx.keys(): answer = '<unk>'
         
-        if answer in self.ignore_list: answer = '<unk>' 
+        if answer not in self.word_list: answer = '<unk>' 
         
         Y = self.word2idx[answer]
 

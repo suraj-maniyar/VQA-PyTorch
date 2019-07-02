@@ -16,13 +16,13 @@ For data augmentation, I have flipped the training images. The image_features.pk
 
 I used an LSTM which has 2 layers each with 64 hidden units. 
 
-### Approach 1
+### Approach 1.1
 The image features (512 dimensional) is passed through a ense layers to reduce it to a dimension of 256. The output from LSTM model is also passed through a dense layer to make it of dimension 256. These 2 feature vectors were **concatenated** before feeding them to a dense layer of dimension equal to the vocabulary size. The output is passed through softmax for classification. This did not give very good results and the validation accuracy was stuck at 29%.  
 
-### Approach 2
+### Approach 1.2
 One reason for the low accuracy was that the 256 dimensional feature vectors extracted from both the image and the question were having different distributions (mean and variances). So I applied a BatchNorm to each of the features before concatenation. This increased the accuracy to 33%.  
 
-### Approach 3
+### Approach 1.3
 Another alternative I tried was to **multiply** the features instead of cancatenating them. So now the 2 feature vectors of 256 dimension are multiplied element-wise which gives a validation accuracy of 38%.  
 
 
@@ -31,7 +31,7 @@ I have trained the network for over 300 epochs and it very easily overfits the d
 The following figure shows the learning curves I got:  
 
 <p align="center">
-  <img src="assets/learning_curves.png" width="100%">
+  <img src="assets/learning_curves_resnet18.png" width="100%">
 </p>
 
 
@@ -71,4 +71,19 @@ A: ketchup
 
 Q: What bread is used?  
 A: wheat
+
+
+
+
+### Approach 2.1
+The [original paper](https://arxiv.org/abs/1505.00468) mentions the architecture which uses 2 LSTM layers with 512 hidden units. The hidden state and the the internal state of the 2 LSTM cells are flattened and concatenated to obtain a layer of 2048 dimensions. The dimensionaltity of these layers is then reduced to 1024 by passing it through a dense layer. The image features are now extracted from VGG16 pretrained model. The output features vector from VGG16 is of dimension 4096. This is also reduced to 1024 by passing it through a dense layer. The 2 feature vectors (1024 dimension each) are merged by element-wise multiplication after batch-notrmalization. These are then passed through 2 more dense layers of 1024 dimension each. tanh non-linearity is used everywhere and dropout is set to 0.6. The final dense layer has dimensions matching the size of unique answers in the training dataset. Softmax activation is used and the model is trained with cross-entropy loss.
+
+## Results
+The following are the results obtained with the new architecture trained for 160 epochs. The model gives best validation accuracy of **57%**:  
+
+<p align="center">
+  <img src="assets/learning_curves_vgg16.png" width="100%">
+</p>
+
+
 

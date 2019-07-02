@@ -6,14 +6,16 @@ def read(path):
         data = pickle.load(f)
     return data
 
-ta = read('results/train_accuracy.pkl')
-tl = read('results/train_loss.pkl')
-va = read('results/val_accuracy.pkl')
-vl = read('results/val_loss.pkl')
+ta = read('results/train_accuracy_resnet.pkl')
+tl = read('results/train_loss_resnet.pkl')
+va = read('results/val_accuracy_resnet.pkl')
+vl = read('results/val_loss_resnet.pkl')
+
 
 plt.subplot(1,2,1)
+plt.title('Cross Entropy Loss (ResNet-18)')
+plt.ylim(0,600)
 plt.grid()
-plt.title('Loss')
 plt.xlabel('Epochs')
 plt.ylabel('Loss')
 tl, = plt.plot(tl, label='Train Loss')
@@ -22,8 +24,9 @@ plt.legend(handles=[tl, vl])
 
 
 plt.subplot(1,2,2)
+plt.title('Accuracy (ResNet-18)')
+plt.ylim(0,101)
 plt.grid()
-plt.title('Accuracy')
 plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 ta, = plt.plot(ta, label='Train Acc')
