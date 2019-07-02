@@ -108,7 +108,7 @@ A: 1
 </p>
 
 Q: What is in the background?  
-A: '<unk>' (unknown)
+A: unknown  
 
 Q: What color is the vase?  
 A: white  
@@ -119,7 +119,7 @@ A: white
 </p>
 
 Q: What time of day is this?  
-A: '<unk>'  
+A: unknown  
 
 Q: What is in the air?  
 A: kite  
