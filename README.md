@@ -12,12 +12,6 @@ The CNN I used for feature extraction from iamges is ResNet-18. The input images
 
 For data augmentation, I have flipped the training images. The image_features.pkl file consists of list of lists in this format: [[feature1, feature2], path, question, answer] where feature1 is the 512 dimensional features vector for that image and feature2 is the feature vector for a 180 degree flipped image. In case of validation data, the val_features.pkl file consists of list of lists in the format: [feature, path, question, answer].  
 
-```
-This is test code.
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-```
 
 I used an LSTM which has 2 layers each with 64 hidden units. 
 
